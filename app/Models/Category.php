@@ -14,7 +14,7 @@ class Category extends Model
         if (!$image){
             return $this->attributes['image'] = fake()->imageUrl;
         }
-        $newImageName = uniqid() . '_' . 'category' . '.' . $image->extension();
+        $newImageName = uniqid() . '_' . 'category_'. now()->timestamp . '.' . $image->extension();
         $image->move(public_path('category_images') , $newImageName);
         return $this->attributes['image'] =  '/'.'category_images'.'/' . $newImageName;
     }

@@ -14,16 +14,25 @@ class Restaurant extends Model
         if (!$logo){
             return $this->attributes['logo'] = fake()->imageUrl;
         }
-        $newImageName = uniqid() . '_' . 'logo' . '.' . $logo->extension();
+        $newImageName = uniqid() . '_' . 'logo_'. now()->timestamp . '.' . $logo->extension();
         $logo->move(public_path('restaurant_images/logos') , $newImageName);
         return $this->attributes['logo'] =  '/restaurant_images/logos/'. $newImageName;
+    }
+
+    public function setQrAttribute ($logo){
+        if (!$logo){
+            return $this->attributes['qr'] = fake()->imageUrl;
+        }
+        $newImageName = uniqid() . '_' . 'qr_'. now()->timestamp . '.' . $logo->extension();
+        $logo->move(public_path('restaurant_images/QR') , $newImageName);
+        return $this->attributes['qr'] =  '/restaurant_images/QRs/'. $newImageName;
     }
 
     public function setCoverAttribute ($cover){
         if (!$cover){
             return $this->attributes['cover'] = fake()->imageUrl;
         }
-        $newImageName = uniqid() . '_' . 'cover' . '.' . $cover->extension();
+        $newImageName = uniqid() . '_' . 'cover_'. now()->timestamp . '.' . $cover->extension();
         $cover->move(public_path('restaurant_images/covers') , $newImageName);
         return $this->attributes['cover'] =  '/restaurant_images/covers/'. $newImageName;
     }

@@ -14,7 +14,7 @@ class Product extends Model
         if (!$image){
             return $this->attributes['image'] = fake()->imageUrl;
         }
-        $newImageName = uniqid() . '_' . 'product' . '.' . $image->extension();
+        $newImageName = uniqid() . '_' . 'product_'. now()->timestamp . '.' . $image->extension();
         $image->move(public_path('product_images') , $newImageName);
         return $this->attributes['image'] =  '/'.'product_images'.'/' . $newImageName;
     }

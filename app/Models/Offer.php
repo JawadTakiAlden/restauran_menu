@@ -14,7 +14,7 @@ class Offer extends Model
         if (!$image){
             return $this->attributes['image'] = fake()->imageUrl;
         }
-        $newImageName = uniqid() . '_' . 'offer' . '.' . $image->extension();
+        $newImageName = uniqid() . '_' . 'offer_'. now()->timestamp . '.' . $image->extension();
         $image->move(public_path('offer_images') , $newImageName);
         return $this->attributes['image'] =  '/'.'offer_images'.'/' . $newImageName;
     }

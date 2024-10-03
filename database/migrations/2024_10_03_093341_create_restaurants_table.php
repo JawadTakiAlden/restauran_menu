@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
+            $table->string('name', 100);
+            $table->string('description' , 500);
             $table->string('logo');
             $table->string('cover');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('template_id')->references('id')->on('templates')->onDelete('cascade');
+            $table->string('menu_link');
+            $table->string('qr');
             $table->boolean('is_pending')->default(false);
             $table->boolean('is_offer_shown')->default(false);
             $table->timestamps();

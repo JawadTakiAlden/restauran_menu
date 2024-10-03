@@ -2,64 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateRestaurantRequest;
+use App\Http\Requests\RenewRestaurantSubscriptionRequest;
+use App\Http\Requests\UpdateRestaurantLogoRequest;
+use App\Http\Requests\UpdateRestaurantRequest;
 use App\Models\Restaurant;
+use App\Services\Restaurant\RestaurantService;
 use Illuminate\Http\Request;
 
 class RestaurantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function __construct(protected RestaurantService $restaurantService)
     {
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function createRes(CreateRestaurantRequest $request)
     {
-        //
+        return $this->restaurantService->createRes($request);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function deleteRes()
     {
-        //
+        // TODO: Implement deleteRes() method.
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Restaurant $restaurant)
+    public function editRes(UpdateRestaurantRequest $request)
     {
-        //
+        // TODO: Implement editRes() method.
+    }
+    public function generateNewPassword()
+    {
+        // TODO: Implement generateNewPassword() method.
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Restaurant $restaurant)
+    public function getAll()
     {
-        //
+        // TODO: Implement getAll() method.
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Restaurant $restaurant)
+    public function renewSubscription(RenewRestaurantSubscriptionRequest $request)
     {
-        //
+        // TODO: Implement renewSubscription() method.
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Restaurant $restaurant)
+    public function stopRes()
     {
-        //
+        // TODO: Implement stopRes() method.
+    }
+
+    public function updateLogo(UpdateRestaurantLogoRequest $request)
+    {
+        // TODO: Implement updateLogo() method.
     }
 }
