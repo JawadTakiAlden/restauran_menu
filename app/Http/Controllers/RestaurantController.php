@@ -38,7 +38,7 @@ class RestaurantController extends Controller
 
     public function getAll()
     {
-        // TODO: Implement getAll() method.
+        return $this->restaurantService->getAll();
     }
 
     public function renewSubscription(RenewRestaurantSubscriptionRequest $request)

@@ -49,7 +49,7 @@ class RestaurantRepo implements RestaurantRepoI
             return $this->success(SRestaurantResource::make($restaurant));
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 
@@ -69,7 +69,12 @@ class RestaurantRepo implements RestaurantRepoI
 
     public function getAll()
     {
-        // TODO: Implement getAll() method.
+        try {
+            return $this->success(SRestaurantResource::collection(Restaurant::all()));
+        } catch (\Throwable $th){
+            return $this->serverError($th);
+        }
+
     }
 
     public function renewSubscription()

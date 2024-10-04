@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,15 +22,6 @@ class Restaurant extends Model
         return $this->attributes['logo'] =  '/restaurant_images/logos/'. $newImageName;
     }
 
-    public function setQrAttribute ($logo){
-        if (!$logo){
-            return $this->attributes['qr'] = fake()->imageUrl;
-        }
-        $newImageName = uniqid() . '_' . 'qr_'. now()->timestamp . '.' . $logo->extension();
-        $logo->move(public_path('restaurant_images/QR') , $newImageName);
-        return $this->attributes['qr'] =  '/restaurant_images/QRs/'. $newImageName;
-    }
-
     public function setCoverAttribute ($cover){
         if (!$cover){
             return $this->attributes['cover'] = fake()->imageUrl;
@@ -43,10 +35,13 @@ class Restaurant extends Model
     {
         parent::boot();
         static::created(function ($restaurant){
-            $menu_link = "https://goma.menu.food/$restaurant->name";
-
-            $fileName = $restaurant->name . '-' . $restaurant->id . now()->timestamp .'.svg';
+            $id = Crypt::encryptString($restaurant->id);
+            $menu_link = "https://goma.menu.food?mid=$id&mn=$restaurant->name";
+            $restaurant->menu_link = $menu_link;
+            $fileName = $restaurant->id . '-' . now()->timestamp .'.svg';
             $filePath = public_path('qr-codes/' . $fileName);
+
+            $restaurant->qr = '/qr-codes/' . $fileName;
 
             if (!File::exists(public_path('qr-codes'))) {
                 File::makeDirectory(public_path('qr-codes'), 0755, true);
@@ -55,8 +50,25 @@ class Restaurant extends Model
             QrCode::format('svg')
                 ->size(300)
                 ->generate($menu_link, $filePath);
+
+            $restaurant->save();
         });
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function template(){
+        return $this->belongsTo(Template::class);
+    }
+
+    public function restaurantTranslations(){
+        return $this->hasMany(RestaurantTranslation::class);
+    }
+
+    public function subscription(){
+        return $this->hasMany(RestaurantSubscription::class);
+    }
 
 }

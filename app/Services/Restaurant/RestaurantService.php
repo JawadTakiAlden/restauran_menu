@@ -32,7 +32,7 @@ class RestaurantService
 
     public function getAll()
     {
-        // TODO: Implement getAll() method.
+        return $this->restaurantRepo->getAll();
     }
 
     public function renewSubscription()

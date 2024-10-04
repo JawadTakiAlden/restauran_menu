@@ -14,7 +14,7 @@ class SRestaurantResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $translations = collect($this->restaurantTranslations());
+        $translations = collect($this->restaurantTranslations);
         return [
           'id' => $this->id,
             'name' => $this->name,
@@ -25,21 +25,14 @@ class SRestaurantResource extends JsonResource
             'is_offer_shown' => $this->is_offer_shown,
             'template' => $this->template,
             'user' => $this->user,
-            'expiry_date_subscription' => $this->subscription->expiry_date,
             'subscription' => $this->subscription,
+            'menu_link' => $this->menu_link,
+            'QR' => $this->qr,
             'translation' => [
-                'name' => $translations->map(function ($translation) {
-                    return [
-                        $translation['lng'] => $translation['name'],
-                    ];
-                })->merge([
+                'name' => $translations->pluck('name', 'lng')->merge([
                     'en' => $this->name
                 ]),
-                'description' => $translations->map(function ($translation) {
-                    return [
-                        $translation['lng'] => $translation['description'],
-                    ];
-                })->merge([
+                'description' => $translations->pluck('description', 'lng')->merge([
                     'en' => $this->description
                 ]),
             ]

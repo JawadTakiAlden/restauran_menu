@@ -18,6 +18,7 @@ Route::prefix('v1')->group(function (){
                 Route::post('/createSuperAdmin' , [UserController::class , 'createSuperAdmin']);
             });
             Route::prefix('restaurants')->group(function (){
+                Route::get('/all' , [RestaurantController::class , 'getAll']);
                 Route::post('/create' , [RestaurantController::class , 'createRes']);
             });
         });
