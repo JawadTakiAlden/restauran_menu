@@ -4,8 +4,11 @@ namespace App\Repositories\Restaurant;
 
 use App\AppRoles;
 use App\Http\Requests\CreateRestaurantRequest;
+use App\Http\Resources\SuperAdmin\SRestaurantResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Restaurant;
+use App\Models\RestaurantSubscription;
+use App\Models\RestaurantTranslation;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +21,7 @@ class RestaurantRepo implements RestaurantRepoI
             DB::beginTransaction();
             $user = User::create($request->only(['username' , 'email' , 'password']));
             $user->assignRole(AppRoles::RESTAURANT);
+            $restaurantTranslations = $request->restaurant_translations;
             $restaurant = Restaurant::create(
                 array_merge(
                     $request->only(['name' , 'description'  ,'logo' , 'cover' , 'is_pending' , 'template_id' , 'is_offer_shown']),
@@ -26,9 +30,23 @@ class RestaurantRepo implements RestaurantRepoI
                     ]
                 )
             );
-//            TODO :: Create Restaurant Subscription record and restaurant resources to return data
+            if ($restaurantTranslations){
+                foreach ($restaurantTranslations as $restaurantTranslation){
+                    RestaurantTranslation::create(
+                        array_merge(
+                            $restaurantTranslation ,
+                            ['restaurant_id' => $restaurant->id]
+                        )
+                    );
+                }
+            }
+            RestaurantSubscription::create([
+               'restaurant_id' => $restaurant->id,
+               'expiry_date' => $request->expiry_date,
+               'price' => $request->price
+            ]);
             DB::commit();
-            return $this->success(null);
+            return $this->success(SRestaurantResource::make($restaurant));
         }catch (\Throwable $th){
             DB::rollBack();
             return $this->serverError();

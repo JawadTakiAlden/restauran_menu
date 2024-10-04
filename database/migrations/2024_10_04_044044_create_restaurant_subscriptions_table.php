@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('restaurant_translations', function (Blueprint $table) {
+        Schema::create('restaurant_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('lng');
-            $table->string('name');
-            $table->string('description');
+            $table->string('expiry_date');
+            $table->double('price');
             $table->foreignId('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
             $table->timestamps();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('restaurant_translations');
+        Schema::dropIfExists('restaurant_subscriptions');
     }
 };

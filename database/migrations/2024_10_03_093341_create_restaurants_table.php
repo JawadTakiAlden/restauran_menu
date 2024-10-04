@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('cover');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('template_id')->references('id')->on('templates')->onDelete('cascade');
-            $table->string('menu_link');
-            $table->string('qr');
+            $table->string('menu_link')->nullable();
+            $table->string('qr')->nullable();
             $table->boolean('is_pending')->default(false);
             $table->boolean('is_offer_shown')->default(false);
             $table->timestamps();

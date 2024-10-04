@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('lng');
             $table->string('name');
+            $table->foreignId('template_id')->references('id')->on('templates')->onDelete('cascade');
             $table->timestamps();
         });
     }
