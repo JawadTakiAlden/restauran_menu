@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Category;
 
+use App\Http\Resources\SuperAdmin\SCatgeoryResource;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,6 +13,16 @@ class CategoryRepo implements CategoryRepoI
     {
         $categories = Category::all();
         return $categories;
+    }
+
+    public function getCategoryTree($parentId = null){
+        $categories = Category::where('parent_id', $parentId)->get();
+
+        foreach ($categories as $category) {
+            $category->children = $this->getCategoryTree($category->id);
+        }
+
+        return SCatgeoryResource::collection($categories);
     }
 
     public function create(array $data) : Category

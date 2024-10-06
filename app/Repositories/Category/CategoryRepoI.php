@@ -17,6 +17,8 @@ interface CategoryRepoI
 
     public function show($id) : ?Category;
 
+    public function getCategoryTree($parentId = null);
+
     public function createTranslation(array $data);
 
     public function checkIfTranslationFound(int $categoryId , string $lng) : bool;

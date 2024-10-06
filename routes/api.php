@@ -32,12 +32,12 @@ Route::prefix('v1')->group(function (){
         });
         Route::middleware(['role:super_admin|admin'])->group(function (){
             Route::prefix('/categories')->group(function (){
-                Route::get('/all' , [CategoryController::class , 'getAll']);
+                Route::get('/all' , [CategoryController::class , 'categoryTree']);
                 Route::get('/show/{category}' , [CategoryController::class , 'show']);
                 Route::post('/create' , [CategoryController::class , 'create']);
                 Route::post('/update/{category}' , [CategoryController::class , 'update']);
                 Route::delete('/delete/{category}', [CategoryController::class , 'delete']);
-                Route::post('/createTranslations' , [CategoryController::class , 'createTranslations']);
+                Route::post('/createTranslations/{category}' , [CategoryController::class , 'createTranslations']);
             });
         });
 

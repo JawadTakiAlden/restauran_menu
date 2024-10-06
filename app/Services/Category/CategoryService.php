@@ -21,7 +21,16 @@ class CategoryService
     public function getAll(){
         try {
             return $this->success(SCatgeoryResource::collection($this->categoryRepo->getAll()));
-        }catch (\Throwable){
+        }catch (\Throwable $th){
+            return $this->serverError($th);
+        }
+    }
+
+    public function getCategoryTree(){
+        try {
+            $categories = $this->categoryRepo->getCategoryTree();
+            return $categories;
+        }catch (\Throwable $th){
             return $this->serverError();
         }
     }
@@ -72,9 +81,11 @@ class CategoryService
                 'sort'
             ]));
 
+            $translationfailed = collect([]);
             if ($request->translations){
                 foreach ($request->translations as $translation){
                     if ($this->categoryRepo->checkIfTranslationFound($category->id , $translation['lng'])){
+                        $translationfailed->push($translation['lng'] . " already added");
                         continue;
                     }
                     $this->categoryRepo->createTranslation(array_merge($translation , [
@@ -85,7 +96,8 @@ class CategoryService
 
             DB::commit();
             return $this->success([
-                'message' => 'category updated successfully'
+                'message' => 'category updated successfully',
+                'translation_failed' => $translationfailed
             ]);
 
         }catch (\Throwable){
@@ -102,9 +114,11 @@ class CategoryService
             if (!$category){
                 return  $this->error('category not found' , 404);
             }
+            $translationfailed = collect([]);
             if ($request->translations){
                 foreach ($request->translations as $translation){
                     if ($this->categoryRepo->checkIfTranslationFound($category->id , $translation['lng'])){
+                        $translationfailed->push($translation['lng'] . " already added");
                         continue;
                     }
                     $this->categoryRepo->createTranslation(array_merge($translation , [
@@ -114,11 +128,11 @@ class CategoryService
             }
             DB::commit();
             return $this->success([
-                'message' => 'category updated successfully'
+                'translation_failed' => $translationfailed
             ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
 
     }
@@ -130,23 +144,26 @@ class CategoryService
             if (!$category){
                 return  $this->error('category not found' , 404);
             }
-            $this->categoryRepo->delete($id);
+            $this->categoryRepo->delete($category);
             DB::commit();
             return $this->success([
                 'status' => true
             ]);
-        }catch (\Throwable){
+        }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 
     public function show($id){
         try {
             $category = $this->categoryRepo->show($id);
+            if (!$category){
+                return $this->error('category not found' , 404);
+            }
             return $this->success(SCatgeoryResource::make($category));
-        }catch (\Throwable){
-            return $this->serverError();
+        }catch (\Throwable $th){
+            return $this->serverError($th);
         }
     }
 }

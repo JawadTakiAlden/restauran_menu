@@ -14,6 +14,14 @@ class SCatgeoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'image' => $this->image,
+            'visibility' => $this->visibility,
+            'is_parent' => collect($this->categories)->isNotEmpty(),
+            'subCategories' => SCatgeoryResource::collection($this->categories)
+        ];
     }
 }

@@ -33,4 +33,8 @@ class CategoryController extends Controller
     public function createTranslations(CreateCategoryTranslationRequest $request , int $id){
         return $this->categoryService->createTranslations($request , $id);
     }
+
+    public function categoryTree(){
+        return $this->categoryService->getCategoryTree();
+    }
 }
