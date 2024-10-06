@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Auth\AuthRepo;
 use App\Repositories\Auth\AuthRepoI;
+use App\Repositories\Category\CategoryRepo;
+use App\Repositories\Category\CategoryRepoI;
 use App\Repositories\Restaurant\RestaurantRepo;
 use App\Repositories\Restaurant\RestaurantRepoI;
 use App\Repositories\User\UserRepo;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AuthRepoI::class, AuthRepo::class);
         $this->app->bind(UserRepoI::class, UserRepo::class);
         $this->app->bind(RestaurantRepoI::class, RestaurantRepo::class);
+        $this->app->bind(CategoryRepoI::class, CategoryRepo::class);
 //        $this->app->bind(AuthService::class, function ($app) {
 //            return new AuthService($app->make(AuthRepoI::class));
 //        });

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image');
             $table->integer('sort');
             $table->foreignId('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
-            $table->foreignId('parent_id')->nullable()->references('id')->on('categories')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->references('id')->on('categories')->onDelete('set null');
             $table->boolean('visibility')->default(true);
             $table->timestamps();
         });

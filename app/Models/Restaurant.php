@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -55,19 +57,19 @@ class Restaurant extends Model
         });
     }
 
-    public function user(){
+    public function user() : BelongsTo{
         return $this->belongsTo(User::class);
     }
 
-    public function template(){
+    public function template() : BelongsTo{
         return $this->belongsTo(Template::class);
     }
 
-    public function restaurantTranslations(){
+    public function restaurantTranslations() : HasMany{
         return $this->hasMany(RestaurantTranslation::class);
     }
 
-    public function subscription(){
+    public function subscription() : HasMany{
         return $this->hasMany(RestaurantSubscription::class);
     }
 

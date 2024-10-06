@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRestaurantLogoRequest extends FormRequest
+class CreateCategoryTranslationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class UpdateRestaurantLogoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'logo' => 'sometimes|image',
-            'cover' => 'sometimes|image',
+            'translations' => 'required|array',
+            'translations.*.lng' => 'required|string',
+            'translations.*.name' => 'required|string',
+            'translations.*.description' => 'required|string'
         ];
     }
 }

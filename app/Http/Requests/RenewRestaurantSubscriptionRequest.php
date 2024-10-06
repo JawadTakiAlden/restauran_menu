@@ -11,7 +11,7 @@ class RenewRestaurantSubscriptionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class RenewRestaurantSubscriptionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'expiry_date' => 'required|date',
+            'price' => 'required|numeric'
         ];
     }
 }

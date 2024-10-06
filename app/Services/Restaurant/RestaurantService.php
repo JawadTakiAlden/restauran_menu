@@ -28,6 +28,7 @@ class RestaurantService
     public function createRes(CreateRestaurantRequest $request)
     {
         try {
+            DB::beginTransaction();
             $user = $this->restaurantRepo->createUserRestaurant($request->only(['username' , 'email' , 'password']));
             $user->assignRole(AppRoles::RESTAURANT);
             $restaurant = $this->restaurantRepo->createRes(
@@ -44,7 +45,9 @@ class RestaurantService
                 'price' => $request->price
             ]);
             DB::commit();
-            return $this->success(SRestaurantResource::make($restaurant));
+            return $this->success([
+                'restaurant_id' => $restaurant->id
+            ]);
         }catch (\Throwable $th){
             DB::rollBack();
             return $this->serverError($th);
@@ -62,9 +65,10 @@ class RestaurantService
             if ($request->translations){
                 foreach ($request->translations as $translation){
                     if ($this->restaurantRepo->checkIfTranslationFound($restaurant->id , $translation['lng'])){
-                        $translation_failed->push($translation['lng'] . "already added");
+                        $translation_failed->push($translation['lng'] . " already added");
+                        continue;
                     }
-                    $this->restaurantRepo->createTranslation($translation);
+                    $this->restaurantRepo->createTranslation(array_merge($translation , ['restaurant_id' => $id]));
                 }
             }
             DB::commit();
@@ -73,7 +77,7 @@ class RestaurantService
             ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 
@@ -92,7 +96,7 @@ class RestaurantService
             ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 
@@ -119,10 +123,12 @@ class RestaurantService
             $data = $request->only(['name', 'description', 'logo', 'cover', 'username', 'template_id', 'is_offer_shown', 'is_pending']);
             $restaurant = $this->restaurantRepo->editRes($data , $res);
             DB::commit();
-            return $this->success(SRestaurantResource::make($restaurant));
+            return $this->success([
+                'restaurant_id' => $restaurant->id
+            ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
 
     }

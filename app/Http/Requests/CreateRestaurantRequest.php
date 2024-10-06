@@ -24,8 +24,8 @@ class CreateRestaurantRequest extends FormRequest
         return [
             'name' => 'required|string|unique:restaurants,name',
             'description' => 'required|string|max:500',
-            'logo' => 'image',
-            'cover' => 'image',
+            'logo' => 'required|image',
+            'cover' => 'required|image',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string',
             'username' => 'required|string',

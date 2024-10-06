@@ -12,6 +12,7 @@ use App\Models\RestaurantTranslation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RestaurantRepo implements RestaurantRepoI
 {
@@ -21,9 +22,9 @@ class RestaurantRepo implements RestaurantRepoI
         $restaurant = Restaurant::create($data);
         return $restaurant;
     }
-    public function show(int $id): Restaurant
+    public function show(int $id): ?Restaurant
     {
-        $restaurant = Restaurant::where('id' , $id);
+        $restaurant = Restaurant::where('id' , $id)->first();
         return $restaurant;
     }
     public function createUserRestaurant(array $data) : User
@@ -57,8 +58,8 @@ class RestaurantRepo implements RestaurantRepoI
     }
     public function generateNewPassword(string $password , Restaurant $restaurant)
     {
-        $restaurant->update([
-           'password' => $password
+        $restaurant->user()->update([
+           'password' =>  Hash::make($password)
         ]);
     }
     public function getAll() : Collection

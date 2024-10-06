@@ -33,7 +33,7 @@ class AuthRepo implements AuthRepoI
             ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 

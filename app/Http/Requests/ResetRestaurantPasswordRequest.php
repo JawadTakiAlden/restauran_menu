@@ -11,7 +11,7 @@ class ResetRestaurantPasswordRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class ResetRestaurantPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'password' => 'required|string|min:7'
         ];
     }
 }

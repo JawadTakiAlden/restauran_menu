@@ -18,7 +18,7 @@ interface RestaurantRepoI
      */
     public function getAll() : Collection;
 
-    public function show(int $id) : Restaurant;
+    public function show(int $id) : ?Restaurant ;
 
     public function createRes(array $data) : Restaurant;
 

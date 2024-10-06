@@ -21,13 +21,14 @@ class UpdateRestaurantRequest extends FormRequest
      */
     public function rules(): array
     {
+        $restaurantId = $this->route('restaurant');
         return [
-            'name' => 'required|string|unique:restaurants,name',
-            'description' => 'required|string|max:500',
+            'name' => 'sometimes|string|unique:restaurants,name,'.$restaurantId,
+            'description' => 'sometimes|string|max:500',
             'logo' => 'image',
             'cover' => 'image',
-            'username' => 'required|string',
-            'template_id' => 'required|numeric|exists:templates,id',
+            'username' => 'sometimes|string',
+            'template_id' => 'sometimes|numeric|exists:templates,id',
             'is_offer_shown' => 'boolean',
             'is_pending' => 'boolean',
         ];
