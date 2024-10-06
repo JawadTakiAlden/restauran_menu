@@ -34,10 +34,6 @@ class CreateRestaurantRequest extends FormRequest
             'is_offer_shown' => 'boolean',
             'is_pending' => 'boolean',
             'price' => 'required|numeric|min:0',
-            'restaurant_translations' => 'array',
-            'restaurant_translations.*.lng' => 'required|in:ar,en',
-            'restaurant_translations.*.name' => 'required|string|max:100',
-            'restaurant_translations.*.description' => 'required|string|max:500',
         ];
     }
 }

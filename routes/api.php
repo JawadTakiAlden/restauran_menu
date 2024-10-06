@@ -19,10 +19,16 @@ Route::prefix('v1')->group(function (){
             });
             Route::prefix('restaurants')->group(function (){
                 Route::get('/all' , [RestaurantController::class , 'getAll']);
+                Route::get('/show/{restaurant}' , [RestaurantController::class , 'show']);
                 Route::post('/create' , [RestaurantController::class , 'createRes']);
+                Route::post('/update/{restaurant}' , [RestaurantController::class , 'editRes']);
+                Route::post('/delete/{restaurant}' , [RestaurantController::class , 'deleteRes']);
+                Route::post('/renewSubscription/{restaurant}' , [RestaurantController::class , 'renewSubscription']);
+                Route::post('/updateLogoOrCover/{restaurant}' , [RestaurantController::class , 'updateLogoOrCover']);
+                Route::patch('/resetPassword/{restaurant}' , [RestaurantController::class , 'generateNewPassword']);
+                Route::post('/addTranslations/{restaurant}' , [RestaurantController::class , 'addTranslations']);
             });
         });
-
 //        Route::middleware(['role' => 'restaurant'])->group(function (){
 //
 //        });

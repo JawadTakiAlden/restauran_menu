@@ -10,85 +10,72 @@ use App\Models\Restaurant;
 use App\Models\RestaurantSubscription;
 use App\Models\RestaurantTranslation;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class RestaurantRepo implements RestaurantRepoI
 {
     use HTTPResponse;
-    public function createRes(CreateRestaurantRequest $request)
+    public function createRes(array $data) : Restaurant
     {
-        try {
-            DB::beginTransaction();
-            $user = User::create($request->only(['username' , 'email' , 'password']));
-            $user->assignRole(AppRoles::RESTAURANT);
-            $restaurantTranslations = $request->restaurant_translations;
-            $restaurant = Restaurant::create(
-                array_merge(
-                    $request->only(['name' , 'description'  ,'logo' , 'cover' , 'is_pending' , 'template_id' , 'is_offer_shown']),
-                    [
-                        "user_id" => $user->id
-                    ]
-                )
-            );
-            if ($restaurantTranslations){
-                foreach ($restaurantTranslations as $restaurantTranslation){
-                    RestaurantTranslation::create(
-                        array_merge(
-                            $restaurantTranslation ,
-                            ['restaurant_id' => $restaurant->id]
-                        )
-                    );
-                }
-            }
-            RestaurantSubscription::create([
-               'restaurant_id' => $restaurant->id,
-               'expiry_date' => $request->expiry_date,
-               'price' => $request->price
-            ]);
-            DB::commit();
-            return $this->success(SRestaurantResource::make($restaurant));
-        }catch (\Throwable $th){
-            DB::rollBack();
-            return $this->serverError($th);
-        }
+        $restaurant = Restaurant::create($data);
+        return $restaurant;
+    }
+    public function show(int $id): Restaurant
+    {
+        $restaurant = Restaurant::where('id' , $id);
+        return $restaurant;
+    }
+    public function createUserRestaurant(array $data) : User
+    {
+        $user = User::create($data);
+        return $user;
+    }
+    public function createRestaurantSubscription(array $data) : RestaurantSubscription
+    {
+        $subscriotion = RestaurantSubscription::create($data);
+        return $subscriotion;
+    }
+    public function deleteRes(Restaurant $restaurant) : bool
+    {
+        $restaurant->delete();
+        return true;
     }
 
-    public function deleteRes()
-    {
-        // TODO: Implement deleteRes() method.
+    public function createTranslation(array $data) : RestaurantTranslation{
+        $translation = RestaurantTranslation::create($data);
+        return $translation;
     }
 
-    public function editRes()
-    {
-        // TODO: Implement editRes() method.
+    public function checkIfTranslationFound(int $restaurantId , string $lng) : bool{
+        return RestaurantTranslation::where(['restaurant_id' => $restaurantId , 'lng' => $lng])->exists();
     }
-    public function generateNewPassword()
+    public function editRes(array $data , Restaurant $restaurant) : Restaurant
     {
-        // TODO: Implement generateNewPassword() method.
+        $restaurant->update($data);
+        return $restaurant;
     }
-
-    public function getAll()
+    public function generateNewPassword(string $password , Restaurant $restaurant)
     {
-        try {
-            return $this->success(SRestaurantResource::collection(Restaurant::all()));
-        } catch (\Throwable $th){
-            return $this->serverError($th);
-        }
-
+        $restaurant->update([
+           'password' => $password
+        ]);
     }
-
-    public function renewSubscription()
+    public function getAll() : Collection
     {
-        // TODO: Implement renewSubscription() method.
+       return Restaurant::all();
     }
-
-    public function stopRes()
+    public function stopRes(Restaurant $restaurant) : bool
     {
-        // TODO: Implement stopRes() method.
+        $is_pending = !$restaurant->is_pending;
+        $restaurant->update([
+           'is_pending' => $is_pending
+        ]);
+        return $is_pending;
     }
-
-    public function updateLogo()
+    public function updateLogoOrCover(array $data , Restaurant $restaurant) : Restaurant
     {
-        // TODO: Implement updateLogo() method.
+        $restaurant->update($data);
+        return $restaurant;
     }
 }

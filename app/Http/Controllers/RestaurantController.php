@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRestaurantRequest;
+use App\Http\Requests\CreateRestaurantTranslationRequest;
 use App\Http\Requests\RenewRestaurantSubscriptionRequest;
+use App\Http\Requests\ResetRestaurantPasswordRequest;
 use App\Http\Requests\UpdateRestaurantLogoRequest;
 use App\Http\Requests\UpdateRestaurantRequest;
 use App\Models\Restaurant;
@@ -22,18 +24,26 @@ class RestaurantController extends Controller
         return $this->restaurantService->createRes($request);
     }
 
-    public function deleteRes()
-    {
-        // TODO: Implement deleteRes() method.
+    public function show(int $id){
+        return $this->restaurantService->show($id);
     }
 
-    public function editRes(UpdateRestaurantRequest $request)
-    {
-        // TODO: Implement editRes() method.
+    public function addTranslations($id , CreateRestaurantTranslationRequest $request){
+        return $this->restaurantService->createTranslations($id , $request);
     }
-    public function generateNewPassword()
+
+    public function deleteRes(int $id)
     {
-        // TODO: Implement generateNewPassword() method.
+        return $this->restaurantService->deleteRes($id);
+    }
+
+    public function editRes(UpdateRestaurantRequest $request , int $id)
+    {
+        return $this->restaurantService->editRes($request , $id);
+    }
+    public function generateNewPassword(ResetRestaurantPasswordRequest $request , $id)
+    {
+        return $this->restaurantService->generateNewPassword($id , $request);
     }
 
     public function getAll()
@@ -41,18 +51,18 @@ class RestaurantController extends Controller
         return $this->restaurantService->getAll();
     }
 
-    public function renewSubscription(RenewRestaurantSubscriptionRequest $request)
+    public function renewSubscription(RenewRestaurantSubscriptionRequest $request , int $id)
     {
-        // TODO: Implement renewSubscription() method.
+        return $this->restaurantService->renewSubscription($id , $request);
     }
 
-    public function stopRes()
+    public function stopRes(int $id)
     {
-        // TODO: Implement stopRes() method.
+        return $this->restaurantService->stopRes($id);
     }
 
-    public function updateLogo(UpdateRestaurantLogoRequest $request)
+    public function updateLogoOrCover(UpdateRestaurantLogoRequest $request , int $id)
     {
-        // TODO: Implement updateLogo() method.
+        return $this->restaurantService->updateLogoOrCover($request , $id);
     }
 }
