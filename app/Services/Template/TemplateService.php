@@ -160,5 +160,4 @@ class TemplateService
             return $this->serverError($throwable);
         }
     }
-
 }

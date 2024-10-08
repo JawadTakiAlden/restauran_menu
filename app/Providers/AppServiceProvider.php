@@ -6,6 +6,8 @@ use App\Repositories\Auth\AuthRepo;
 use App\Repositories\Auth\AuthRepoI;
 use App\Repositories\Category\CategoryRepo;
 use App\Repositories\Category\CategoryRepoI;
+use App\Repositories\Offer\OfferRepo;
+use App\Repositories\Offer\OfferRepoI;
 use App\Repositories\Product\ProductRepo;
 use App\Repositories\Product\ProductRepoI;
 use App\Repositories\Restaurant\RestaurantRepo;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CategoryRepoI::class, CategoryRepo::class);
         $this->app->bind(ProductRepoI::class, ProductRepo::class);
         $this->app->bind(TemplateRepoI::class, TemplateRepo::class);
+        $this->app->bind(OfferRepoI::class, OfferRepo::class);
 //        $this->app->bind(AuthService::class, function ($app) {
 //            return new AuthService($app->make(AuthRepoI::class));
 //        });

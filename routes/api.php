@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\TemplateController;
@@ -58,9 +59,9 @@ Route::prefix('v1')->group(function (){
                 Route::delete('/delete/{productId}' , [ProductController::class , 'delete']);
             });
             Route::prefix('offers')->group(function (){
-               Route::get('/offers/{restaurant}');
-               Route::post('/create');
-               Route::post('/delete/{offer}');
+               Route::get('/offers/{restaurant}' , [OfferController::class , 'getByRestaurant']);
+               Route::post('/create' , [OfferController::class , 'create']);
+               Route::post('/delete/{offer}' , [OfferController::class , 'delete']);
             });
         });
 
