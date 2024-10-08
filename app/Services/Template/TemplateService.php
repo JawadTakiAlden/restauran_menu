@@ -2,10 +2,13 @@
 
 namespace App\Services\Template;
 
+use App\Http\Requests\CreateTemplateColorRequest;
+use App\Http\Requests\CreateTemplateTranslationRequest;
 use App\Http\Resources\TemplateResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Template;
 use App\Repositories\Template\TemplateRepoI;
+use Illuminate\Support\Facades\DB;
 
 class TemplateService
 {
@@ -34,20 +37,75 @@ class TemplateService
             return $this->serverError();
         }
     }
-    public function delete(int $id)
+    public function createTranslations($templateId , CreateTemplateTranslationRequest $request){
+        try {
+            $template = $this->templateRepo->show($templateId);
+            if (!$templateId){
+                return $this->error('template not found' ,404);
+            }
+            $translationFailed = collect([]);
+            if ($request->translations){
+                foreach ($request->translations as $translation){
+                    if ($this->templateRepo->checkIfTranslationFound($template->id , $translation['lng'])){
+                        $translationFailed->push($translation['lng'] . " already added");
+                        continue;
+                    }
+                    $data = array_merge($translation , [
+                        'template_id' => $template->id
+                    ]);
+                    $this->templateRepo->createTranslation($data);
+                }
+            }
+            return $this->success([
+                'status' => true,
+                'translations_failed' => $translationFailed
+            ]);
+        }catch (\Throwable $th){
+            return $this->serverError($th);
+        }
+    }
+
+    public function createColors(int $templateId , CreateTemplateColorRequest $request){
+        try {
+            $template = $this->templateRepo->show($templateId);
+            if (!$templateId){
+                return $this->error('template not found' ,404);
+            }
+            $colorsFailed = collect([]);
+            if ($request->colors){
+                foreach ($request->colors as $color){
+                    if ($this->templateRepo->checkIfColorFound($template->id , $color['key'])){
+                        $colorsFailed->push($color['key'] . " already added");
+                        continue;
+                    }
+                    $data = array_merge($color , [
+                        'template_id' => $template->id
+                    ]);
+                    $this->templateRepo->createColor($data);
+                }
+            }
+            return $this->success([
+                'status' => true,
+                'colors_failed' => $colorsFailed
+            ]);
+        }catch (\Throwable $th) {
+            return $this->serverError($th);
+        }
+    }
+    public function delete(int $templateId)
     {
         try {
             DB::beginTransaction();
-            $template=$this->templateRepo->show($id);
+            $template = $this->templateRepo->show($templateId);
             if (!$template)
             {
                 return $this->error('template not found',404);
             }
-
-            return $this->success();
+            $this->templateRepo->delete($template);
             DB::commit();
-
-
+            return $this->success([
+                "status" => true
+            ]);
         }
         catch (\Throwable $throwable)
         {
@@ -55,4 +113,5 @@ class TemplateService
             return $this->serverError($throwable);
         }
     }
+
 }
