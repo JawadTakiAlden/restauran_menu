@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\SuperAdmin;
 
+use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,6 +24,7 @@ class SCatgeoryResource extends JsonResource
             'visibility' => $this->visibility,
             'is_parent' => collect($this->categories)->isNotEmpty(),
             'subCategories' => SCatgeoryResource::collection($this->categories),
+            'products' => ProductResource::collection($this->products),
             'translation' => [
                 'name' => $translations->pluck('name', 'lng')->merge([
                     'en' => $this->name

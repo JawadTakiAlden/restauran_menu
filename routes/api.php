@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function (){
                Route::get('/all' , [ProductController::class , 'getAll']);
                 Route::get('/all/{categoryID}' , [ProductController::class , 'getProductsByCategory']);
                 Route::post('/create' , [ProductController::class , 'create']);
+                Route::post('/update/{product}' , [ProductController::class , 'update']);
                 Route::delete('/delete/{productId}' , [ProductController::class , 'delete']);
             });
         });

@@ -18,7 +18,7 @@ class ProductService
     {
     }
 
-    public function getAll() : JsonResponse  {
+    public function getAll(){
         try {
             $products  = $this->productRepo->getAll();
             return $this->success(ProductResource::collection($products));
@@ -27,7 +27,7 @@ class ProductService
         }
     }
 
-    public function getProductByCatgeory(int $categoryId) : JsonResponse{
+    public function getProductByCatgeory(int $categoryId){
         try {
             $products  = $this->productRepo->getProductOfCategory($categoryId);
             return $this->success(ProductResource::collection($products));
@@ -63,12 +63,12 @@ class ProductService
         }
     }
 
-    public function delete($productId) : JsonResponse{
+    public function delete($productId){
         try {
 
             $product  = $this->productRepo->show($productId);
 
-            if ($product){
+            if (!$product){
                 return $this->error('product not found' , 404);
             }
 
@@ -88,11 +88,11 @@ class ProductService
             DB::beginTransaction();
             $product = $this->productRepo->show($productId);
 
-            if ($product){
+            if (!$product){
                 return $this->error('product not found' , 404);
             }
 
-            $product = $this->productRepo->update($request->only([
+            $this->productRepo->update($request->only([
                 'name','description','restaurant_id','category_id','price','image','sort'
             ]) , $product);
 
@@ -117,7 +117,7 @@ class ProductService
             ]);
         }catch (\Throwable $th){
             DB::rollBack();
-            return $this->serverError();
+            return $this->serverError($th);
         }
     }
 }
