@@ -37,8 +37,8 @@ Route::prefix('v1')->group(function (){
                 Route::post('/create');
                 Route::post('/update/{template}');
                 Route::delete('/delete/{template}');
-                Route::post('/createTranslations/{template}');
-                Route::get('/createColors/{template}');
+                Route::post('/createTranslations/{template}' , [TemplateController::class , 'createTranslations']);
+                Route::post('/createColors/{template}' , [TemplateController::class , 'createTemplateColors']);
             });
         });
         Route::middleware(['role:super_admin|admin'])->group(function (){

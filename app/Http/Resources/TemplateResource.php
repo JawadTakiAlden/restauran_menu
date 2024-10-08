@@ -15,11 +15,12 @@ class TemplateResource extends JsonResource
     public function toArray(Request $request): array
     {
         $translations = $this->templateTranslations;
+        $colors = $this->templateColors;
         return [
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
-            'template_colors' => $this->templateColors,
+            'template_colors' => $colors->pluck('color' , 'key'),
             'translations' => [
                 'name' => $translations->pluck('name', 'lng')->merge([
                     'en' => $this->name
