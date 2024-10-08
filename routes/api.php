@@ -64,6 +64,5 @@ Route::prefix('v1')->group(function (){
                Route::post('/delete/{offer}' , [OfferController::class , 'delete']);
             });
         });
-
     });
 });
