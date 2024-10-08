@@ -10,7 +10,7 @@ class TemplateRepo implements TemplateRepoI
     {
         return Template::where('id' , $id)->first();
     }
-    public function getAll(): collection
+    public function getAll(): Collection
     {
         $templates=Template::all();
         return $templates;
