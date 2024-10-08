@@ -4,6 +4,7 @@ namespace App\Services\Template;
 
 use App\Http\Requests\CreateTemplateColorRequest;
 use App\Http\Requests\CreateTemplateTranslationRequest;
+use App\Http\Requests\UpdateTemplateRequest;
 use App\Http\Resources\TemplateResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Template;
@@ -110,6 +111,41 @@ class TemplateService
         catch (\Throwable $throwable)
         {
             DB::rollback();
+            return $this->serverError($throwable);
+        }
+    }
+
+    public function updateTemplate(UpdateTemplateRequest $request,int $id)
+    {
+        try {
+            $template=$this->templateRepo->show($id);
+            if (!$template)
+            {
+                return $this->error("template not found",404);
+            }
+            $this->updateTemplate($request->only(['name','image']),$template);
+            $translationfailed = collect([]);
+            if ($request->translations){
+                foreach ($request->translations as $translation){
+                    if ($this->templateRepo->checkIfTranslationFound($template->id , $translation['lng'])){
+                        $translationfailed->push($translation['lng'] . " already added");
+                        continue;
+                    }
+                    $this->templateRepo->createTranslation(array_merge($translation , [
+                        'template_id' => $template->id
+                    ]));
+                }
+            }
+
+            DB::commit();
+            return $this->success([
+                'message' => 'template updated successfully',
+                'translation_failed' => $translationfailed
+            ]);
+        }
+        catch (\Throwable $throwable)
+        {
+            DB::rollBack();
             return $this->serverError($throwable);
         }
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTemplateColorRequest;
 use App\Http\Requests\CreateTemplateTranslationRequest;
+use App\Http\Requests\UpdateTemplateRequest;
 use App\Models\Template;
 use App\Services\Template\TemplateService;
 use Illuminate\Http\Request;
@@ -31,5 +32,9 @@ class TemplateController extends Controller
    public function delete(int $id)
    {
        return $this->templateService->delete($id);
+   }
+   public function updateTemplate(UpdateTemplateRequest $request,int $id)
+   {
+       return $this->templateService->updateTemplate($request,$id);
    }
 }

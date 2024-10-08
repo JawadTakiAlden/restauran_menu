@@ -48,4 +48,10 @@ class TemplateRepo implements TemplateRepoI
         $template->delete();
         return true;
     }
+    public function updateTemplate(array $data , Template $template): bool
+    {
+        $template->update($data);
+        return true;
+    }
+
 }

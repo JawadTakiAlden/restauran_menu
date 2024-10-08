@@ -20,4 +20,6 @@ interface TemplateRepoI
     public function createColor(array $data);
 
     public function checkIfColorFound(int $templateId , string $colorKey) : bool;
+
+    public function updateTemplate(array $data,Template $template) : bool;
 }
