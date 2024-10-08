@@ -30,6 +30,14 @@ Route::prefix('v1')->group(function (){
                 Route::patch('/resetPassword/{user}' , [RestaurantController::class , 'generateNewPassword']);
                 Route::post('/addTranslations/{restaurant}' , [RestaurantController::class , 'addTranslations']);
             });
+            Route::prefix('templates')->group(function (){
+               Route::get('/all');
+                Route::post('/create');
+                Route::post('/update/{template}');
+                Route::delete('/delete/{template}');
+                Route::post('/createTranslations/{template}');
+                Route::get('/createColors/{template}');
+            });
         });
         Route::middleware(['role:super_admin|admin'])->group(function (){
             Route::prefix('/categories')->group(function (){
@@ -46,6 +54,11 @@ Route::prefix('v1')->group(function (){
                 Route::post('/create' , [ProductController::class , 'create']);
                 Route::post('/update/{product}' , [ProductController::class , 'update']);
                 Route::delete('/delete/{productId}' , [ProductController::class , 'delete']);
+            });
+            Route::prefix('offers')->group(function (){
+               Route::get('/offers/{restaurant}');
+               Route::post('/create');
+               Route::post('/delete/{offer}');
             });
         });
 
