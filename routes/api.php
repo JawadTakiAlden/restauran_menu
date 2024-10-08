@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::prefix('v1')->group(function (){
             });
             Route::prefix('templates')->group(function (){
                Route::get('/all');
+                Route::get('/show/{template}' , [TemplateController::class , 'show']);
                 Route::post('/create');
                 Route::post('/update/{template}');
                 Route::delete('/delete/{template}');

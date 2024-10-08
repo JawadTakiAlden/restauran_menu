@@ -10,6 +10,8 @@ use App\Repositories\Product\ProductRepo;
 use App\Repositories\Product\ProductRepoI;
 use App\Repositories\Restaurant\RestaurantRepo;
 use App\Repositories\Restaurant\RestaurantRepoI;
+use App\Repositories\Template\TemplateRepo;
+use App\Repositories\Template\TemplateRepoI;
 use App\Repositories\User\UserRepo;
 use App\Repositories\User\UserRepoI;
 use App\Services\Auth\AuthService;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RestaurantRepoI::class, RestaurantRepo::class);
         $this->app->bind(CategoryRepoI::class, CategoryRepo::class);
         $this->app->bind(ProductRepoI::class, ProductRepo::class);
+        $this->app->bind(TemplateRepoI::class, TemplateRepo::class);
 //        $this->app->bind(AuthService::class, function ($app) {
 //            return new AuthService($app->make(AuthRepoI::class));
 //        });
