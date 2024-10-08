@@ -10,4 +10,14 @@ class TemplateRepo implements TemplateRepoI
     {
         return Template::where('id' , $id)->first();
     }
+    public function getAll(): collection
+    {
+        $templates=Template::all();
+        return $templates;
+    }
+    public function delete(Template $template) : bool
+    {
+        $template->delete();
+        return true;
+    }
 }

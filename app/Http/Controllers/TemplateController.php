@@ -15,4 +15,11 @@ class TemplateController extends Controller
     public function show(int $templateId){
        return $this->templateService->show($templateId);
    }
+   public function getAll(){
+        return $this->templateService->getAll();
+   }
+   public function delete(int $id)
+   {
+       return $this->templateService->delete($id);
+   }
 }
