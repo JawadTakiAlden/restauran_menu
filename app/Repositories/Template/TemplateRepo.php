@@ -47,4 +47,9 @@ class TemplateRepo implements TemplateRepoI
         $template->delete();
         return true;
     }
+
+    public function createTemplate(array $data) : Template
+    {
+        return Template::create($data);
+    }
 }

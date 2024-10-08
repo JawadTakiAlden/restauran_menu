@@ -34,7 +34,7 @@ Route::prefix('v1')->group(function (){
             Route::prefix('templates')->group(function (){
                Route::get('/all' , [TemplateController::class , 'getAll']);
                Route::get('/show/{template}' , [TemplateController::class , 'show']);
-               Route::post('/create');
+               Route::post('/create' , [TemplateController::class , 'createTemplate']);
                Route::post('/update/{template}');
                Route::delete('/delete/{template}' , [TemplateController::class , 'delete']);
                Route::post('/createTranslations/{template}' , [TemplateController::class , 'createTranslations']);
