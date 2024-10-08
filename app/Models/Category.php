@@ -28,4 +28,8 @@ class Category extends Model
     public function categories() : HasMany {
         return $this->hasMany(Category::class , 'parent_id');
     }
+
+    public function categoryTranslations(){
+        return $this->hasMany(CategoryTranslation::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -38,6 +39,12 @@ Route::prefix('v1')->group(function (){
                 Route::post('/update/{category}' , [CategoryController::class , 'update']);
                 Route::delete('/delete/{category}', [CategoryController::class , 'delete']);
                 Route::post('/createTranslations/{category}' , [CategoryController::class , 'createTranslations']);
+            });
+            Route::prefix('products')->group(function (){
+               Route::get('/all' , [ProductController::class , 'getAll']);
+                Route::get('/all/{categoryID}' , [ProductController::class , 'getProductsByCategory']);
+                Route::post('/create' , [ProductController::class , 'create']);
+                Route::delete('/delete/{productId}' , [ProductController::class , 'delete']);
             });
         });
 

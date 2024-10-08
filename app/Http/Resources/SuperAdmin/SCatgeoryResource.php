@@ -14,6 +14,7 @@ class SCatgeoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $translations = $this->categoryTranslations;
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -21,7 +22,15 @@ class SCatgeoryResource extends JsonResource
             'image' => $this->image,
             'visibility' => $this->visibility,
             'is_parent' => collect($this->categories)->isNotEmpty(),
-            'subCategories' => SCatgeoryResource::collection($this->categories)
+            'subCategories' => SCatgeoryResource::collection($this->categories),
+            'translation' => [
+                'name' => $translations->pluck('name', 'lng')->merge([
+                    'en' => $this->name
+                ]),
+                'description' => $translations->pluck('description', 'lng')->merge([
+                    'en' => $this->description
+                ]),
+            ]
         ];
     }
 }
