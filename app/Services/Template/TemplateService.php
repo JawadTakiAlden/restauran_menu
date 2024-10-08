@@ -8,6 +8,7 @@ use App\Http\Resources\TemplateResource;
 use App\HttpResponse\HTTPResponse;
 use App\Models\Template;
 use App\Repositories\Template\TemplateRepoI;
+use Illuminate\Support\Facades\DB;
 
 class TemplateService
 {
@@ -15,7 +16,16 @@ class TemplateService
     public function __construct(protected TemplateRepoI $templateRepo)
     {
     }
-
+    public function getAll()
+    {
+        try {
+            return $this->success(TemplateResource::collection($this->templateRepo->getAll()));
+        }
+        catch (\Throwable $throwable)
+        {
+            return $this->serverError($throwable);
+        }
+    }
     public function show(int $templateId){
         try {
             $template = $this->templateRepo->show($templateId);
@@ -27,7 +37,6 @@ class TemplateService
             return $this->serverError();
         }
     }
-
     public function createTranslations($templateId , CreateTemplateTranslationRequest $request){
         try {
             $template = $this->templateRepo->show($templateId);
@@ -79,8 +88,30 @@ class TemplateService
                 'status' => true,
                 'colors_failed' => $colorsFailed
             ]);
-        }catch (\Throwable $th){
+        }catch (\Throwable $th) {
             return $this->serverError($th);
         }
     }
+    public function delete(int $templateId)
+    {
+        try {
+            DB::beginTransaction();
+            $template = $this->templateRepo->show($templateId);
+            if (!$template)
+            {
+                return $this->error('template not found',404);
+            }
+            $this->templateRepo->delete($template);
+            DB::commit();
+            return $this->success([
+                "status" => true
+            ]);
+        }
+        catch (\Throwable $throwable)
+        {
+            DB::rollback();
+            return $this->serverError($throwable);
+        }
+    }
+
 }

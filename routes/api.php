@@ -32,13 +32,13 @@ Route::prefix('v1')->group(function (){
                 Route::post('/addTranslations/{restaurant}' , [RestaurantController::class , 'addTranslations']);
             });
             Route::prefix('templates')->group(function (){
-               Route::get('/all');
-                Route::get('/show/{template}' , [TemplateController::class , 'show']);
-                Route::post('/create');
-                Route::post('/update/{template}');
-                Route::delete('/delete/{template}');
-                Route::post('/createTranslations/{template}' , [TemplateController::class , 'createTranslations']);
-                Route::post('/createColors/{template}' , [TemplateController::class , 'createTemplateColors']);
+               Route::get('/all' , [TemplateController::class , 'getAll']);
+               Route::get('/show/{template}' , [TemplateController::class , 'show']);
+               Route::post('/create');
+               Route::post('/update/{template}');
+               Route::delete('/delete/{template}' , [TemplateController::class , 'delete']);
+               Route::post('/createTranslations/{template}' , [TemplateController::class , 'createTranslations']);
+               Route::post('/createColors/{template}' , [TemplateController::class , 'createTemplateColors']);
             });
         });
         Route::middleware(['role:super_admin|admin'])->group(function (){

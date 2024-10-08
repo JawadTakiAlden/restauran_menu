@@ -24,5 +24,12 @@ class TemplateController extends Controller
 
    public function createTemplateColors(int $templateId , CreateTemplateColorRequest $request){
         return $this->templateService->createColors($templateId, $request);
+    }
+   public function getAll(){
+        return $this->templateService->getAll();
+   }
+   public function delete(int $id)
+   {
+       return $this->templateService->delete($id);
    }
 }

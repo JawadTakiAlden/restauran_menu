@@ -5,6 +5,7 @@ namespace App\Repositories\Template;
 use App\Models\Template;
 use App\Models\TemplateColor;
 use App\Models\TemplateTranslation;
+use Illuminate\Database\Eloquent\Collection;
 
 class TemplateRepo implements TemplateRepoI
 {
@@ -12,7 +13,6 @@ class TemplateRepo implements TemplateRepoI
     {
         return Template::where('id' , $id)->first();
     }
-
     public function createTranslation(array $data)
     {
         return TemplateTranslation::create($data);
@@ -36,5 +36,15 @@ class TemplateRepo implements TemplateRepoI
             'template_id' => $templateId,
             'key' => $colorKey
         ])->exists();
+    }
+    public function getAll(): Collection
+    {
+        $templates=Template::all();
+        return $templates;
+    }
+    public function delete(Template $template) : bool
+    {
+        $template->delete();
+        return true;
     }
 }

@@ -3,9 +3,14 @@
 namespace App\Repositories\Template;
 
 use App\Models\Template;
+use Illuminate\Database\Eloquent\Collection;
 
 interface TemplateRepoI
 {
+    public function getAll() : Collection;
+
+    public function delete(Template $template) : bool;
+
     public function show($id) : Template;
 
     public function createTranslation(array $data);
