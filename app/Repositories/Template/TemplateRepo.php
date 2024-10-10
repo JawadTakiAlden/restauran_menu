@@ -53,4 +53,9 @@ class TemplateRepo implements TemplateRepoI
     {
         return Template::create($data);
     }
+    public function updateTemplate(array $data , Template $template): bool
+    {
+        $template->update($data);
+        return true;
+    }
 }

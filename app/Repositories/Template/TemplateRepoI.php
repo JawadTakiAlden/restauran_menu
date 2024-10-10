@@ -22,4 +22,6 @@ interface TemplateRepoI
     public function checkIfColorFound(int $templateId , string $colorKey) : bool;
 
     public function createTemplate(array $data) : Template;
+
+    public function updateTemplate(array $data,Template $template) : bool;
 }
